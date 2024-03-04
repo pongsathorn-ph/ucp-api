@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ucp-api-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ucp-api-app
+  template:
+    metadata:
+      labels:
+        app: ucp-api-app
+    spec:
+      containers:
+        - name: ucp-api-app
+          image: "{{IMAGE_REPO}}:2024.02.00-0001-alpha"
+          env:
+            - name: SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: ucp-api-configmap
+                  key: SERVER_URL
+          ports:
+            - containerPort: 80
